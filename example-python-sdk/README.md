@@ -1,6 +1,6 @@
 
 # Sideko Generated SDK Swagger Petstore - OpenAPI 3.0 Python SDK
-The purpose of this project is to view Sideko generated python code as a reference to understand how it might look for your APIs.
+The purpose of this project is to view Sideko generated code as a reference to understand how it might look for your APIs.
 
 ## Overview
 This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
