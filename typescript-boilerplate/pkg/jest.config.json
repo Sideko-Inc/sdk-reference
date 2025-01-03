@@ -1,0 +1,11 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "testPathIgnorePatterns": [
+    "/dist/"
+  ],
+  "moduleNameMapper": {
+    "^test$": "<rootDir>/src/index.ts",
+    "^test/(.*)$": "<rootDir>/src/$1"
+  }
+}

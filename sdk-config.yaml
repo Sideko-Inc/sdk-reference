@@ -1,0 +1,74 @@
+api: my-petstore # an API id from a private Sideko org for the petstore API specification
+languages:
+  python:
+    sdk_name: my_petstore_py
+  typescript:
+    sdk_name: my_petstore_ts
+
+servers:
+  - url: https://petstore3.swagger.io/api/v3
+    name: production
+    default: true
+auths:
+  - id: api_key # identifier for the security scheme in the specification
+    param: api_key
+  - id: petstore_auth
+    param: oauth_token
+
+modules:
+  - path: pet
+    operations:
+      - id: addPet
+        function_name: create
+      - id: deletePet
+        function_name: delete
+      - id: getPetById
+        function_name: get
+      - id: updatePet
+        function_name: update
+      - id: updatePetWithForm
+        function_name: update_form
+  - path: pet.status
+    operations:
+      - id: findPetsByStatus
+        function_name: list
+  - path: pet.tag
+    operations:
+      - id: findPetsByTags
+        function_name: list
+  - path: pet.image
+    operations:
+      - id: uploadFile
+        function_name: upload
+  - path: store.inventory
+    operations:
+      - id: getInventory
+        function_name: get
+  - path: store.order
+    operations:
+      - id: deleteOrder
+        function_name: delete
+      - id: getOrderById
+        function_name: get
+      - id: placeOrder
+        function_name: place
+  - path: user
+    operations:
+      - id: createUser
+        function_name: create
+      - id: deleteUser
+        function_name: delete
+      - id: getUserByName
+        function_name: get
+      - id: updateUser
+        function_name: update
+  - path: user.create_with_list
+    operations:
+      - id: createUsersWithListInput
+        function_name: create
+  - path: auth
+    operations:
+      - id: logoutUser
+        function_name: logout
+      - id: loginUser
+        function_name: login

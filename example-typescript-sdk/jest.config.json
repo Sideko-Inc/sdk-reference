@@ -1,0 +1,11 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "testPathIgnorePatterns": [
+    "/dist/"
+  ],
+  "moduleNameMapper": {
+    "^my_petstore_ts$": "<rootDir>/src/index.ts",
+    "^my_petstore_ts/(.*)$": "<rootDir>/src/$1"
+  }
+}
