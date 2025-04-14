@@ -27,3 +27,6 @@ export function zodTransform<
 }
 
 export const zodUploadFile = z.custom<UploadFile>((val) => isUploadFile(val));
+// Workaround because the type zod infers from z.any() allows undefined
+// https://github.com/colinhacks/zod/issues/3730
+export const zodRequiredAny = z.custom<Required<any>>((x) => x !== undefined);

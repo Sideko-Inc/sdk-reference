@@ -1,5 +1,3 @@
-
-
 import { Blob as NodeBlob } from "node-fetch";
 
 export class BinaryResponse {

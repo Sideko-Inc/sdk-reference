@@ -1,5 +1,3 @@
-
-
 import { RequestConfig } from "./core-client";
 
 export class ApiError extends Error {

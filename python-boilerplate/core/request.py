@@ -1,20 +1,18 @@
 from typing import Any, Dict, Type, Union, Sequence, List
 from urllib.parse import quote_plus
+
 import httpx
 from typing_extensions import TypedDict, Required, NotRequired
 from pydantic import TypeAdapter, BaseModel
+
 from .type_utils import NotGiven
+from .query import QueryParams
 
 """
 Request configuration and utility functions for handling HTTP requests.
 This module provides type definitions and helper functions for building
 and processing HTTP requests in a type-safe manner.
 """
-
-# Type alias for query parameters that can handle both primitive data and sequences
-QueryParams = Dict[
-    str, Union[httpx._types.PrimitiveData, Sequence[httpx._types.PrimitiveData]]
-]
 
 
 class RequestConfig(TypedDict):
@@ -96,6 +94,22 @@ def to_encodable(
     adapter: TypeAdapter = TypeAdapter(dump_with)
     validated_item = adapter.validate_python(filtered_item)
     return model_dump(validated_item)
+
+
+def to_content(*, file: httpx._types.FileTypes) -> httpx._types.RequestContent:
+    """
+    Converts the various ways files can be provided to something that is accepted by
+    the httpx.request content kwarg
+    """
+    if isinstance(file, tuple):
+        file_content: httpx._types.FileContent = file[1]
+    else:
+        file_content = file
+
+    if hasattr(file_content, "read") and callable(file_content.read):
+        return file_content.read()
+    else:
+        return file_content
 
 
 def encode_param(

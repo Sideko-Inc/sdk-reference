@@ -1,4 +1,4 @@
-class Sideko:
+class Client:
     def __init__(
         self,
         *,
@@ -6,15 +6,16 @@ class Sideko:
         timeout: typing.Optional[float] = 60,
         httpx_client: typing.Optional[httpx.Client] = None,
     ):
+        """Initialize root client"""
         self._base_client = SyncBaseClient(
             base_url=_get_base_url(base_url=base_url, environment=environment),
-            httpx_client=(
-                httpx.Client(timeout=timeout) if httpx_client is None else httpx_client
-            ),
+            httpx_client=httpx.Client(timeout=timeout)
+            if httpx_client is None
+            else httpx_client,
         )
 
 
-class AsyncSideko:
+class AsyncClient:
     def __init__(
         self,
         *,
@@ -22,13 +23,12 @@ class AsyncSideko:
         timeout: typing.Optional[float] = 60,
         httpx_client: typing.Optional[httpx.AsyncClient] = None,
     ):
+        """Initialize root client"""
         self._base_client = AsyncBaseClient(
             base_url=_get_base_url(base_url=base_url, environment=environment),
-            httpx_client=(
-                httpx.AsyncClient(timeout=timeout)
-                if httpx_client is None
-                else httpx_client
-            ),
+            httpx_client=httpx.AsyncClient(timeout=timeout)
+            if httpx_client is None
+            else httpx_client,
         )
 
 
