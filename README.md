@@ -27,6 +27,12 @@ This approach offers several advantages over template-based generation:
 - Safe manual editing without breaking regeneration capability
 - Consistent coding patterns across different APIs
 
+### How It Works: Visualization 
+
+https://github.com/user-attachments/assets/8c5f2fe9-29b4-4941-a58b-94b5bf6e787d
+
+
+
 ## Example
 
 The repository includes example generated SDKs for the Swagger Petstore API (`./petstore-openapi.json`) to demonstrate the output structure and generated documentation.
