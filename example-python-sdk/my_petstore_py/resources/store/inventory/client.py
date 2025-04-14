@@ -15,8 +15,10 @@ class InventoryClient:
 
     def get(
         self, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> models.GetStoreInventoryResponse:
+    ) -> models.StoreInventoryGetResponse:
         """
+        Returns pet inventories by status
+
         Returns a map of status codes to quantities
 
         GET /store/inventory
@@ -35,13 +37,12 @@ class InventoryClient:
         ```py
         client.store.inventory.get()
         ```
-
         """
         return self._base_client.request(
             method="GET",
             path="/store/inventory",
             auth_names=["api_key"],
-            cast_to=models.GetStoreInventoryResponse,
+            cast_to=models.StoreInventoryGetResponse,
             request_options=request_options or default_request_options(),
         )
 
@@ -52,8 +53,10 @@ class AsyncInventoryClient:
 
     async def get(
         self, *, request_options: typing.Optional[RequestOptions] = None
-    ) -> models.GetStoreInventoryResponse:
+    ) -> models.StoreInventoryGetResponse:
         """
+        Returns pet inventories by status
+
         Returns a map of status codes to quantities
 
         GET /store/inventory
@@ -72,12 +75,11 @@ class AsyncInventoryClient:
         ```py
         await client.store.inventory.get()
         ```
-
         """
         return await self._base_client.request(
             method="GET",
             path="/store/inventory",
             auth_names=["api_key"],
-            cast_to=models.GetStoreInventoryResponse,
+            cast_to=models.StoreInventoryGetResponse,
             request_options=request_options or default_request_options(),
         )

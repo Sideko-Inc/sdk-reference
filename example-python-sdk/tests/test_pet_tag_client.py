@@ -1,8 +1,9 @@
+import pydantic
 import pytest
 import typing
-import pydantic
 
 from my_petstore_py import AsyncClient, Client
+from my_petstore_py.core import BinaryResponse
 from my_petstore_py.environment import Environment
 from my_petstore_py.types import models
 
@@ -15,7 +16,7 @@ def test_list_200_generated_success():
     Expected Status: 200
     Mode: Synchronous execution
 
-    Response : typing.Union[typing.List[Pet], typing.List[Pet]]
+    Response : typing.Union[typing.List[models.Pet], BinaryResponse]
 
     Validates:
     - Authentication requirements are satisfied
@@ -30,10 +31,13 @@ def test_list_200_generated_success():
         api_key="API_KEY", oauth_token="API_TOKEN", environment=Environment.MOCK_SERVER
     )
     response = client.pet.tag.list()
-    adapter = pydantic.TypeAdapter(
-        typing.Union[typing.List[models.Pet], typing.List[models.Pet]]
-    )
-    adapter.validate_python(response)
+    try:
+        pydantic.TypeAdapter(typing.List[models.Pet]).validate_python(response)
+        is_json = True
+    except pydantic.ValidationError:
+        is_json = False
+    is_binary = isinstance(response, BinaryResponse)
+    assert any([is_json, is_binary]), "failed response type check"
 
 
 @pytest.mark.asyncio
@@ -45,7 +49,7 @@ async def test_await_list_200_generated_success():
     Expected Status: 200
     Mode: Asynchronous execution
 
-    Response : typing.Union[typing.List[Pet], typing.List[Pet]]
+    Response : typing.Union[typing.List[models.Pet], BinaryResponse]
 
     Validates:
     - Authentication requirements are satisfied
@@ -60,7 +64,10 @@ async def test_await_list_200_generated_success():
         api_key="API_KEY", oauth_token="API_TOKEN", environment=Environment.MOCK_SERVER
     )
     response = await client.pet.tag.list()
-    adapter = pydantic.TypeAdapter(
-        typing.Union[typing.List[models.Pet], typing.List[models.Pet]]
-    )
-    adapter.validate_python(response)
+    try:
+        pydantic.TypeAdapter(typing.List[models.Pet]).validate_python(response)
+        is_json = True
+    except pydantic.ValidationError:
+        is_json = False
+    is_binary = isinstance(response, BinaryResponse)
+    assert any([is_json, is_binary]), "failed response type check"

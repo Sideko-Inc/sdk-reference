@@ -3,11 +3,13 @@ import typing_extensions
 
 from my_petstore_py.core import (
     AsyncBaseClient,
+    BinaryResponse,
     QueryParams,
     RequestOptions,
     SyncBaseClient,
     default_request_options,
-    encode_param,
+    encode_query_param,
+    to_encodable,
     type_utils,
 )
 from my_petstore_py.types import models
@@ -25,14 +27,16 @@ class StatusClient:
             type_utils.NotGiven,
         ] = type_utils.NOT_GIVEN,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Union[typing.List[models.Pet], typing.List[models.Pet]]:
+    ) -> typing.Union[typing.List[models.Pet], BinaryResponse]:
         """
+        Finds Pets by status
+
         Multiple status values can be provided with comma separated strings
 
         GET /pet/findByStatus
 
         Args:
-            status: typing_extensions.Literal["available", "pending", "sold"]
+            status: Status values that need to be considered for filter
             request_options: Additional options to customize the HTTP request
 
         Returns:
@@ -46,17 +50,25 @@ class StatusClient:
         ```py
         client.pet.status.list()
         ```
-
         """
         _query: QueryParams = {}
         if not isinstance(status, type_utils.NotGiven):
-            _query["status"] = encode_param(status, True)
+            encode_query_param(
+                _query,
+                "status",
+                to_encodable(
+                    item=status,
+                    dump_with=typing_extensions.Literal["available", "pending", "sold"],
+                ),
+                style="form",
+                explode=True,
+            )
         return self._base_client.request(
             method="GET",
             path="/pet/findByStatus",
             auth_names=["petstore_auth"],
             query_params=_query,
-            cast_to=typing.Union[typing.List[models.Pet], typing.List[models.Pet]],
+            cast_to=typing.Union[typing.List[models.Pet], BinaryResponse],
             request_options=request_options or default_request_options(),
         )
 
@@ -73,14 +85,16 @@ class AsyncStatusClient:
             type_utils.NotGiven,
         ] = type_utils.NOT_GIVEN,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Union[typing.List[models.Pet], typing.List[models.Pet]]:
+    ) -> typing.Union[typing.List[models.Pet], BinaryResponse]:
         """
+        Finds Pets by status
+
         Multiple status values can be provided with comma separated strings
 
         GET /pet/findByStatus
 
         Args:
-            status: typing_extensions.Literal["available", "pending", "sold"]
+            status: Status values that need to be considered for filter
             request_options: Additional options to customize the HTTP request
 
         Returns:
@@ -94,16 +108,24 @@ class AsyncStatusClient:
         ```py
         await client.pet.status.list()
         ```
-
         """
         _query: QueryParams = {}
         if not isinstance(status, type_utils.NotGiven):
-            _query["status"] = encode_param(status, True)
+            encode_query_param(
+                _query,
+                "status",
+                to_encodable(
+                    item=status,
+                    dump_with=typing_extensions.Literal["available", "pending", "sold"],
+                ),
+                style="form",
+                explode=True,
+            )
         return await self._base_client.request(
             method="GET",
             path="/pet/findByStatus",
             auth_names=["petstore_auth"],
             query_params=_query,
-            cast_to=typing.Union[typing.List[models.Pet], typing.List[models.Pet]],
+            cast_to=typing.Union[typing.List[models.Pet], BinaryResponse],
             request_options=request_options or default_request_options(),
         )

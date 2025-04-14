@@ -1,8 +1,9 @@
-import pytest
-import typing
+import httpx
 import pydantic
+import pytest
 
-from my_petstore_py import AsyncClient, BinaryResponse, Client
+from my_petstore_py import AsyncClient, Client
+from my_petstore_py.core import BinaryResponse
 from my_petstore_py.environment import Environment
 from my_petstore_py.types import models
 
@@ -15,7 +16,7 @@ def test_place_200_success_default():
     Expected Status: 200
     Mode: Synchronous execution
 
-    Response : Order
+    Response : models.Order
 
     Validates:
     - Authentication requirements are satisfied
@@ -32,8 +33,12 @@ def test_place_200_success_default():
     response = client.store.order.place(
         id=10, pet_id=198772, quantity=7, status="approved"
     )
-    adapter = pydantic.TypeAdapter(models.Order)
-    adapter.validate_python(response)
+    try:
+        pydantic.TypeAdapter(models.Order).validate_python(response)
+        is_json = True
+    except pydantic.ValidationError:
+        is_json = False
+    assert is_json, "failed response type check"
 
 
 @pytest.mark.asyncio
@@ -45,7 +50,7 @@ async def test_await_place_200_success_default():
     Expected Status: 200
     Mode: Asynchronous execution
 
-    Response : Order
+    Response : models.Order
 
     Validates:
     - Authentication requirements are satisfied
@@ -62,8 +67,12 @@ async def test_await_place_200_success_default():
     response = await client.store.order.place(
         id=10, pet_id=198772, quantity=7, status="approved"
     )
-    adapter = pydantic.TypeAdapter(models.Order)
-    adapter.validate_python(response)
+    try:
+        pydantic.TypeAdapter(models.Order).validate_python(response)
+        is_json = True
+    except pydantic.ValidationError:
+        is_json = False
+    assert is_json, "failed response type check"
 
 
 def test_get_200_generated_success():
@@ -74,7 +83,7 @@ def test_get_200_generated_success():
     Expected Status: 200
     Mode: Synchronous execution
 
-    Response : typing.Union[Order, Order]
+    Response : typing.Union[models.Order, BinaryResponse]
 
     Validates:
     - Authentication requirements are satisfied
@@ -89,8 +98,13 @@ def test_get_200_generated_success():
         api_key="API_KEY", oauth_token="API_TOKEN", environment=Environment.MOCK_SERVER
     )
     response = client.store.order.get(order_id=123)
-    adapter = pydantic.TypeAdapter(typing.Union[models.Order, models.Order])
-    adapter.validate_python(response)
+    try:
+        pydantic.TypeAdapter(models.Order).validate_python(response)
+        is_json = True
+    except pydantic.ValidationError:
+        is_json = False
+    is_binary = isinstance(response, BinaryResponse)
+    assert any([is_json, is_binary]), "failed response type check"
 
 
 @pytest.mark.asyncio
@@ -102,7 +116,7 @@ async def test_await_get_200_generated_success():
     Expected Status: 200
     Mode: Asynchronous execution
 
-    Response : typing.Union[Order, Order]
+    Response : typing.Union[models.Order, BinaryResponse]
 
     Validates:
     - Authentication requirements are satisfied
@@ -117,8 +131,13 @@ async def test_await_get_200_generated_success():
         api_key="API_KEY", oauth_token="API_TOKEN", environment=Environment.MOCK_SERVER
     )
     response = await client.store.order.get(order_id=123)
-    adapter = pydantic.TypeAdapter(typing.Union[models.Order, models.Order])
-    adapter.validate_python(response)
+    try:
+        pydantic.TypeAdapter(models.Order).validate_python(response)
+        is_json = True
+    except pydantic.ValidationError:
+        is_json = False
+    is_binary = isinstance(response, BinaryResponse)
+    assert any([is_json, is_binary]), "failed response type check"
 
 
 def test_delete_2xx_generated_success():
@@ -129,7 +148,7 @@ def test_delete_2xx_generated_success():
     Expected Status: 2xx
     Mode: Synchronous execution
 
-    Response : typing.Union[typing.BinaryIO, io.BufferedReader]
+    Response : httpx.Response
 
     Validates:
     - Authentication requirements are satisfied
@@ -144,7 +163,7 @@ def test_delete_2xx_generated_success():
         api_key="API_KEY", oauth_token="API_TOKEN", environment=Environment.MOCK_SERVER
     )
     response = client.store.order.delete(order_id=123)
-    assert isinstance(response, BinaryResponse)
+    assert isinstance(response, httpx.Response)
 
 
 @pytest.mark.asyncio
@@ -156,7 +175,7 @@ async def test_await_delete_2xx_generated_success():
     Expected Status: 2xx
     Mode: Asynchronous execution
 
-    Response : typing.Union[typing.BinaryIO, io.BufferedReader]
+    Response : httpx.Response
 
     Validates:
     - Authentication requirements are satisfied
@@ -171,4 +190,4 @@ async def test_await_delete_2xx_generated_success():
         api_key="API_KEY", oauth_token="API_TOKEN", environment=Environment.MOCK_SERVER
     )
     response = await client.store.order.delete(order_id=123)
-    assert isinstance(response, BinaryResponse)
+    assert isinstance(response, httpx.Response)

@@ -15,7 +15,6 @@ const client = new Client({
   apiKey: process.env["API_KEY"]!!,
   oauthToken: process.env["API_TOKEN"]!!,
 });
-
 const res = await client.pet.delete({ petId: 123 });
 ```
 
@@ -35,7 +34,6 @@ const client = new Client({
   apiKey: process.env["API_KEY"]!!,
   oauthToken: process.env["API_TOKEN"]!!,
 });
-
 const res = await client.pet.get({ petId: 123 });
 ```
 
@@ -55,8 +53,11 @@ const client = new Client({
   apiKey: process.env["API_KEY"]!!,
   oauthToken: process.env["API_TOKEN"]!!,
 });
-
-const res = await client.pet.create({ name: "doggie", photoUrls: ["string"] });
+const res = await client.pet.create({
+  id: 10,
+  name: "doggie",
+  photoUrls: ["string"],
+});
 ```
 
 ### update_form <a name="update_form"></a>
@@ -75,7 +76,6 @@ const client = new Client({
   apiKey: process.env["API_KEY"]!!,
   oauthToken: process.env["API_TOKEN"]!!,
 });
-
 const res = await client.pet.updateForm({ petId: 123 });
 ```
 
@@ -95,6 +95,9 @@ const client = new Client({
   apiKey: process.env["API_KEY"]!!,
   oauthToken: process.env["API_TOKEN"]!!,
 });
-
-const res = await client.pet.update({ name: "doggie", photoUrls: ["string"] });
+const res = await client.pet.update({
+  id: 10,
+  name: "doggie",
+  photoUrls: ["string"],
+});
 ```

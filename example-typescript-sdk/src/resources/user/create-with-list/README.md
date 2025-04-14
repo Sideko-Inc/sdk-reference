@@ -15,6 +15,18 @@ const client = new Client({
   apiKey: process.env["API_KEY"]!!,
   oauthToken: process.env["API_TOKEN"]!!,
 });
-
-const res = await client.user.createWithList.create({ data: [{}] });
+const res = await client.user.createWithList.create({
+  data: [
+    {
+      email: "john@email.com",
+      firstName: "John",
+      id: 10,
+      lastName: "James",
+      password: "12345",
+      phone: "12345",
+      userStatus: 1,
+      username: "theUser",
+    },
+  ],
+});
 ```

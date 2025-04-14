@@ -56,9 +56,9 @@ describe("tests client.pet.create", () => {
       // Get both raw response for status and parsed response for data
       const [rawResponse, response] = await Promise.all([
         client.pet
-          .create({ name: "doggie", photoUrls: ["string"] })
+          .create({ id: 10, name: "doggie", photoUrls: ["string"] })
           .asResponse(),
-        client.pet.create({ name: "doggie", photoUrls: ["string"] }),
+        client.pet.create({ id: 10, name: "doggie", photoUrls: ["string"] }),
       ]);
       expect(rawResponse.status).toBe(200); // Exact status code match
       // Response body automatically validated by Zod schema during deserialization
@@ -102,9 +102,9 @@ describe("tests client.pet.update", () => {
       // Get both raw response for status and parsed response for data
       const [rawResponse, response] = await Promise.all([
         client.pet
-          .update({ name: "doggie", photoUrls: ["string"] })
+          .update({ id: 10, name: "doggie", photoUrls: ["string"] })
           .asResponse(),
-        client.pet.update({ name: "doggie", photoUrls: ["string"] }),
+        client.pet.update({ id: 10, name: "doggie", photoUrls: ["string"] }),
       ]);
       expect(rawResponse.status).toBe(200); // Exact status code match
       // Response body automatically validated by Zod schema during deserialization

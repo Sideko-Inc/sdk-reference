@@ -1,4 +1,4 @@
 export enum Environment {
-  Environment = "https://petstore3.swagger.io/api/v3",
-  MockServer = "https://petstore3.swagger.io/api/v3", // in production this would be a Sideko mock server URL
+  Production = "https://petstore3.swagger.io/api/v3",
+  MockServer = "https://api.sideko.dev/v1/mock/public/petstore/0.1.0",
 }

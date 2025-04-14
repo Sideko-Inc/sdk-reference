@@ -1,5 +1,5 @@
-import typing
 import pydantic
+import typing
 
 
 class Tag(pydantic.BaseModel):

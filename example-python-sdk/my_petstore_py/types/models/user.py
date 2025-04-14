@@ -1,5 +1,5 @@
-import typing
 import pydantic
+import typing
 
 
 class User(pydantic.BaseModel):
@@ -12,7 +12,7 @@ class User(pydantic.BaseModel):
         populate_by_name=True,
     )
 
-    email_field: typing.Optional[str] = pydantic.Field(alias="email", default=None)
+    email: typing.Optional[str] = pydantic.Field(alias="email", default=None)
     first_name: typing.Optional[str] = pydantic.Field(alias="firstName", default=None)
     id: typing.Optional[int] = pydantic.Field(alias="id", default=None)
     last_name: typing.Optional[str] = pydantic.Field(alias="lastName", default=None)

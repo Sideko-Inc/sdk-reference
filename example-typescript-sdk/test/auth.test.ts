@@ -20,19 +20,3 @@ describe("tests client.auth.login", () => {
     },
   );
 });
-
-describe("tests client.auth.logout", () => {
-  test.concurrent(
-    "GET /user/logout | testId: generated_success | Empty response test. Default response",
-    async () => {
-      const client = new Client({
-        apiKey: "API_KEY",
-        oauthToken: "API_TOKEN",
-        environment: Environment.MockServer,
-      });
-      // Verify error response status and rejection
-      const rawResponse = await client.auth.logout().asResponse();
-      await expect(client.auth.logout()).rejects.toThrow();
-    },
-  );
-});

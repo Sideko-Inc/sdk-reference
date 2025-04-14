@@ -1,10 +1,13 @@
 import { types } from "my_petstore_ts";
 import {
   ApiPromise,
+  ApiResponse,
   BinaryResponse,
   CoreClient,
   CoreResourceClient,
   RequestOptions,
+  encodeQueryParam,
+  zodRequiredAny,
   zodUploadFile,
 } from "my_petstore_ts/core";
 import { ImageClient } from "my_petstore_ts/resources/pet/image";
@@ -12,7 +15,6 @@ import * as requests from "my_petstore_ts/resources/pet/request-types";
 import { StatusClient } from "my_petstore_ts/resources/pet/status";
 import { TagClient } from "my_petstore_ts/resources/pet/tag";
 import { Schemas$Pet } from "my_petstore_ts/types/pet";
-import qs from "qs";
 import * as z from "zod";
 
 export class PetClient extends CoreResourceClient {
@@ -28,6 +30,8 @@ export class PetClient extends CoreResourceClient {
     this.image = new ImageClient(this._client);
   }
   /**
+   * Update an existing pet
+   *
    * Update an existing pet by Id
    *
    * PUT /pet
@@ -35,19 +39,20 @@ export class PetClient extends CoreResourceClient {
   update(
     request: requests.UpdateRequest,
     opts?: RequestOptions,
-  ): ApiPromise<types.Pet | types.Pet> {
+  ): ApiPromise<types.Pet | BinaryResponse> {
     return this._client.makeRequest({
       method: "put",
       path: "/pet",
       auth: ["petstore_auth"],
       contentType: "application/json",
       body: Schemas$Pet.out.parse(request),
-      responseType: "json",
-      responseSchema: z.union([Schemas$Pet.in, Schemas$Pet.in]),
+      responseSchema: z.union([Schemas$Pet.in, zodUploadFile]),
       opts,
     });
   }
   /**
+   * Updates a pet in the store with form data
+   *
    *
    *
    * POST /pet/{petId}
@@ -55,21 +60,33 @@ export class PetClient extends CoreResourceClient {
   updateForm(
     request: requests.UpdateFormRequest,
     opts?: RequestOptions,
-  ): ApiPromise<BinaryResponse> {
+  ): ApiPromise<ApiResponse> {
     return this._client.makeRequest({
       method: "post",
       path: `/pet/${request.petId}`,
       auth: ["petstore_auth"],
       query: [
-        qs.stringify({ name: request.name }),
-        qs.stringify({ status: request.status }),
+        encodeQueryParam({
+          name: "name",
+          value: z.string().optional().parse(request.name),
+          style: "form",
+          explode: true,
+        }),
+        encodeQueryParam({
+          name: "status",
+          value: z.string().optional().parse(request.status),
+          style: "form",
+          explode: true,
+        }),
       ],
-      responseType: "blob",
-      responseSchema: zodUploadFile,
+      responseRaw: true,
+      responseSchema: zodRequiredAny,
       opts,
     });
   }
   /**
+   * Add a new pet to the store
+   *
    * Add a new pet to the store
    *
    * POST /pet
@@ -77,19 +94,20 @@ export class PetClient extends CoreResourceClient {
   create(
     request: requests.CreateRequest,
     opts?: RequestOptions,
-  ): ApiPromise<types.Pet | types.Pet> {
+  ): ApiPromise<types.Pet | BinaryResponse> {
     return this._client.makeRequest({
       method: "post",
       path: "/pet",
       auth: ["petstore_auth"],
       contentType: "application/json",
       body: Schemas$Pet.out.parse(request),
-      responseType: "json",
-      responseSchema: z.union([Schemas$Pet.in, Schemas$Pet.in]),
+      responseSchema: z.union([Schemas$Pet.in, zodUploadFile]),
       opts,
     });
   }
   /**
+   * Find pet by ID
+   *
    * Returns a single pet
    *
    * GET /pet/{petId}
@@ -97,17 +115,18 @@ export class PetClient extends CoreResourceClient {
   get(
     request: requests.GetRequest,
     opts?: RequestOptions,
-  ): ApiPromise<types.Pet | types.Pet> {
+  ): ApiPromise<types.Pet | BinaryResponse> {
     return this._client.makeRequest({
       method: "get",
       path: `/pet/${request.petId}`,
       auth: ["api_key", "petstore_auth"],
-      responseType: "json",
-      responseSchema: z.union([Schemas$Pet.in, Schemas$Pet.in]),
+      responseSchema: z.union([Schemas$Pet.in, zodUploadFile]),
       opts,
     });
   }
   /**
+   * Deletes a pet
+   *
    *
    *
    * DELETE /pet/{petId}
@@ -115,13 +134,13 @@ export class PetClient extends CoreResourceClient {
   delete(
     request: requests.DeleteRequest,
     opts?: RequestOptions,
-  ): ApiPromise<BinaryResponse> {
+  ): ApiPromise<ApiResponse> {
     return this._client.makeRequest({
       method: "delete",
       path: `/pet/${request.petId}`,
       auth: ["petstore_auth"],
-      responseType: "blob",
-      responseSchema: zodUploadFile,
+      responseRaw: true,
+      responseSchema: zodRequiredAny,
       opts,
     });
   }

@@ -1,6 +1,6 @@
+import pydantic
 import typing
 import typing_extensions
-import pydantic
 
 
 class User(typing_extensions.TypedDict):
@@ -8,7 +8,7 @@ class User(typing_extensions.TypedDict):
     User
     """
 
-    email_field: typing_extensions.NotRequired[str]
+    email: typing_extensions.NotRequired[str]
 
     first_name: typing_extensions.NotRequired[str]
 
@@ -38,7 +38,7 @@ class _SerializerUser(pydantic.BaseModel):
         populate_by_name=True,
     )
 
-    email_field: typing.Optional[str] = pydantic.Field(alias="email", default=None)
+    email: typing.Optional[str] = pydantic.Field(alias="email", default=None)
     first_name: typing.Optional[str] = pydantic.Field(alias="firstName", default=None)
     id: typing.Optional[int] = pydantic.Field(alias="id", default=None)
     last_name: typing.Optional[str] = pydantic.Field(alias="lastName", default=None)

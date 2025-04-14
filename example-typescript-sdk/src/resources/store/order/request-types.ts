@@ -1,14 +1,13 @@
 import { zodTransform } from "my_petstore_ts/core";
-import {
-  External$OrderStatusEnum,
-  OrderStatusEnum,
-} from "my_petstore_ts/types/order-status-enum";
 import * as z from "zod";
 
 /**
  * DeleteRequest
  */
 export type DeleteRequest = {
+  /**
+   * ID of the order that needs to be deleted
+   */
   orderId: number;
 };
 
@@ -65,6 +64,9 @@ export const Schemas$DeleteRequest = {
  * GetRequest
  */
 export type GetRequest = {
+  /**
+   * ID of order that needs to be fetched
+   */
   orderId: number;
 };
 
@@ -129,7 +131,7 @@ export type PlaceRequest = {
   /**
    * Order Status
    */
-  status?: OrderStatusEnum | undefined;
+  status?: ("approved" | "delivered" | "placed") | undefined;
 };
 
 /**
@@ -143,7 +145,7 @@ export type External$PlaceRequest = {
   petId?: number | undefined;
   quantity?: number | undefined;
   shipDate?: string | undefined;
-  status?: External$OrderStatusEnum | undefined;
+  status?: ("approved" | "delivered" | "placed") | undefined;
 };
 
 /**

@@ -1,10 +1,10 @@
-import typing
 import pydantic
+import typing
 
 
-class GetStoreInventoryResponse(pydantic.BaseModel):
+class StoreInventoryGetResponse(pydantic.BaseModel):
     """
-    GetStoreInventoryResponse
+    StoreInventoryGetResponse
     """
 
     model_config = pydantic.ConfigDict(

@@ -1,5 +1,4 @@
 import { Category, External$Category, Schemas$Category } from "./category";
-import { External$PetStatusEnum, PetStatusEnum } from "./pet-status-enum";
 import { External$Tag, Schemas$Tag, Tag } from "./tag";
 import { zodTransform } from "my_petstore_ts/core";
 import * as z from "zod";
@@ -15,7 +14,7 @@ export type Pet = {
   /**
    * pet status in the store
    */
-  status?: PetStatusEnum | undefined;
+  status?: ("available" | "pending" | "sold") | undefined;
   tags?: Tag[] | undefined;
 };
 
@@ -29,7 +28,7 @@ export type External$Pet = {
   id?: number | undefined;
   name: string;
   photoUrls: string[];
-  status?: External$PetStatusEnum | undefined;
+  status?: ("available" | "pending" | "sold") | undefined;
   tags?: External$Tag[] | undefined;
 };
 

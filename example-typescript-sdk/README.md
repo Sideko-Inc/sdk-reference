@@ -1,6 +1,5 @@
 
-# Sideko Generated SDK Swagger Petstore - OpenAPI 3.0 Typescript SDK
-The purpose of this project is to view Sideko generated code as a reference to understand how it might look for your APIs.
+# Swagger Petstore - OpenAPI 3.0 Typescript SDK
 
 ## Overview
 This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
@@ -67,7 +66,7 @@ const client = new Client({
 * [get](src/resources/user/README.md#get) - Get user by user name
 * [update](src/resources/user/README.md#update) - Update user
 
-### [user.create_with_list](src/resources/user/create-with-list/README.md)
+### [user.createWithList](src/resources/user/create-with-list/README.md)
 
 * [create](src/resources/user/create-with-list/README.md#create) - Creates list of users with given input array
 

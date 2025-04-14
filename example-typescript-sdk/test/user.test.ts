@@ -43,39 +43,3 @@ describe("tests client.user.get", () => {
     },
   );
 });
-
-describe("tests client.user.create", () => {
-  test.concurrent(
-    "POST /user | testId: success_default | Success test with response schema validation. Default response",
-    async () => {
-      const client = new Client({
-        apiKey: "API_KEY",
-        oauthToken: "API_TOKEN",
-        environment: Environment.MockServer,
-      });
-      // Verify error response status and rejection
-      const rawResponse = await client.user.create().asResponse();
-      await expect(client.user.create()).rejects.toThrow();
-    },
-  );
-});
-
-describe("tests client.user.update", () => {
-  test.concurrent(
-    "PUT /user/{username} | testId: success_default | Empty response test. Default response",
-    async () => {
-      const client = new Client({
-        apiKey: "API_KEY",
-        oauthToken: "API_TOKEN",
-        environment: Environment.MockServer,
-      });
-      // Verify error response status and rejection
-      const rawResponse = await client.user
-        .update({ usernamePath: "string" })
-        .asResponse();
-      await expect(
-        client.user.update({ usernamePath: "string" }),
-      ).rejects.toThrow();
-    },
-  );
-});

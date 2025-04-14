@@ -15,6 +15,5 @@ const client = new Client({
   apiKey: process.env["API_KEY"]!!,
   oauthToken: process.env["API_TOKEN"]!!,
 });
-
 const res = await client.store.inventory.get();
 ```

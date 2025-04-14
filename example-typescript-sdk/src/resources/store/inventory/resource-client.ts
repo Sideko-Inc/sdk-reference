@@ -5,24 +5,25 @@ import {
   CoreResourceClient,
   RequestOptions,
 } from "my_petstore_ts/core";
-import { Schemas$GetStoreInventoryResponse } from "my_petstore_ts/types/get-store-inventory-response";
+import { Schemas$StoreInventoryGetResponse } from "my_petstore_ts/types/store-inventory-get-response";
 
 export class InventoryClient extends CoreResourceClient {
   constructor(client: CoreClient) {
     super(client);
   }
   /**
+   * Returns pet inventories by status
+   *
    * Returns a map of status codes to quantities
    *
    * GET /store/inventory
    */
-  get(opts?: RequestOptions): ApiPromise<types.GetStoreInventoryResponse> {
+  get(opts?: RequestOptions): ApiPromise<types.StoreInventoryGetResponse> {
     return this._client.makeRequest({
       method: "get",
       path: "/store/inventory",
       auth: ["api_key"],
-      responseType: "json",
-      responseSchema: Schemas$GetStoreInventoryResponse.in,
+      responseSchema: Schemas$StoreInventoryGetResponse.in,
       opts,
     });
   }

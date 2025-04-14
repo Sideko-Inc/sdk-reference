@@ -6,7 +6,13 @@ import * as z from "zod";
  */
 export type UploadRequest = {
   data: UploadFile;
+  /**
+   * ID of pet to update
+   */
   petId: number;
+  /**
+   * Additional Metadata
+   */
   additionalMetadata?: string | undefined;
 };
 

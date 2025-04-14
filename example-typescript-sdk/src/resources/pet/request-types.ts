@@ -4,10 +4,6 @@ import {
   External$Category,
   Schemas$Category,
 } from "my_petstore_ts/types/category";
-import {
-  External$PetStatusEnum,
-  PetStatusEnum,
-} from "my_petstore_ts/types/pet-status-enum";
 import { External$Tag, Schemas$Tag, Tag } from "my_petstore_ts/types/tag";
 import * as z from "zod";
 
@@ -15,6 +11,9 @@ import * as z from "zod";
  * DeleteRequest
  */
 export type DeleteRequest = {
+  /**
+   * Pet id to delete
+   */
   petId: number;
 };
 
@@ -71,6 +70,9 @@ export const Schemas$DeleteRequest = {
  * GetRequest
  */
 export type GetRequest = {
+  /**
+   * ID of pet to return
+   */
   petId: number;
 };
 
@@ -134,7 +136,7 @@ export type CreateRequest = {
   /**
    * pet status in the store
    */
-  status?: PetStatusEnum | undefined;
+  status?: ("available" | "pending" | "sold") | undefined;
   tags?: Tag[] | undefined;
 };
 
@@ -148,7 +150,7 @@ export type External$CreateRequest = {
   id?: number | undefined;
   name: string;
   photoUrls: string[];
-  status?: External$PetStatusEnum | undefined;
+  status?: ("available" | "pending" | "sold") | undefined;
   tags?: External$Tag[] | undefined;
 };
 
@@ -216,8 +218,17 @@ export const Schemas$CreateRequest = {
  * UpdateFormRequest
  */
 export type UpdateFormRequest = {
+  /**
+   * ID of pet that needs to be updated
+   */
   petId: number;
+  /**
+   * Name of pet that needs to be updated
+   */
   name?: string | undefined;
+  /**
+   * Status of pet that needs to be updated
+   */
   status?: string | undefined;
 };
 
@@ -291,7 +302,7 @@ export type UpdateRequest = {
   /**
    * pet status in the store
    */
-  status?: PetStatusEnum | undefined;
+  status?: ("available" | "pending" | "sold") | undefined;
   tags?: Tag[] | undefined;
 };
 
@@ -305,7 +316,7 @@ export type External$UpdateRequest = {
   id?: number | undefined;
   name: string;
   photoUrls: string[];
-  status?: External$PetStatusEnum | undefined;
+  status?: ("available" | "pending" | "sold") | undefined;
   tags?: External$Tag[] | undefined;
 };
 

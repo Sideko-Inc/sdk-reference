@@ -1,6 +1,7 @@
 export { Client as default } from "my_petstore_ts/client";
 export {
   ApiError,
+  ApiResponse,
   BinaryResponse,
   RequestOptions,
   UploadFile,

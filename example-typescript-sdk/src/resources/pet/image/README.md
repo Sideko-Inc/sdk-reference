@@ -16,6 +16,8 @@ const client = new Client({
   apiKey: process.env["API_KEY"]!!,
   oauthToken: process.env["API_TOKEN"]!!,
 });
-const uploadFile = fs.createReadStream("uploads/file.pdf");
-const res = await client.pet.image.upload({ data: uploadFile, petId: 123 });
+const res = await client.pet.image.upload({
+  data: fs.createReadStream("./file.txt"),
+  petId: 123,
+});
 ```

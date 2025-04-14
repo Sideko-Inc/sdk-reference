@@ -68,7 +68,7 @@ from os import getenv
 
 client = Client(api_key=getenv("API_KEY"), oauth_token=getenv("API_TOKEN"))
 res = client.user.create(
-    email_field="john@email.com",
+    email="john@email.com",
     first_name="John",
     id=10,
     last_name="James",
@@ -87,7 +87,7 @@ from os import getenv
 
 client = AsyncClient(api_key=getenv("API_KEY"), oauth_token=getenv("API_TOKEN"))
 res = await client.user.create(
-    email_field="john@email.com",
+    email="john@email.com",
     first_name="John",
     id=10,
     last_name="James",
@@ -114,7 +114,7 @@ from os import getenv
 client = Client(api_key=getenv("API_KEY"), oauth_token=getenv("API_TOKEN"))
 res = client.user.update(
     username_path="string",
-    email_field="john@email.com",
+    email="john@email.com",
     first_name="John",
     id=10,
     last_name="James",
@@ -134,7 +134,7 @@ from os import getenv
 client = AsyncClient(api_key=getenv("API_KEY"), oauth_token=getenv("API_TOKEN"))
 res = await client.user.update(
     username_path="string",
-    email_field="john@email.com",
+    email="john@email.com",
     first_name="John",
     id=10,
     last_name="James",

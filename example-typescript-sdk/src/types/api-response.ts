@@ -1,10 +1,10 @@
-import { zodTransform } from "my_petstore_ts/core";
+import { ApiResponse, zodTransform } from "my_petstore_ts/core";
 import * as z from "zod";
 
 /**
  * ApiResponse
  */
-export type ApiResponse = {
+export type ApiRes = {
   code?: number | undefined;
   message?: string | undefined;
   type?: string | undefined;
@@ -15,7 +15,7 @@ export type ApiResponse = {
  * ApiResponse without any key transformation, this is what
  * we expect to come in as network data
  */
-export type External$ApiResponse = {
+export type External$ApiRes = {
   code?: number | undefined;
   message?: string | undefined;
   type?: string | undefined;
@@ -24,7 +24,7 @@ export type External$ApiResponse = {
 /**
  * Takes network data, validates it, and transforms keys to match typescript object ApiResponse
  */
-const SchemaIn$ApiResponse: z.ZodType<
+const SchemaIn$ApiRes: z.ZodType<
   ApiResponse, // output type of this zod object
   z.ZodTypeDef,
   unknown
@@ -46,10 +46,10 @@ const SchemaIn$ApiResponse: z.ZodType<
  * @internal
  * Takes typescript data, validates it, and maps keys to match the expected external object External$ApiResponse
  */
-const SchemaOut$ApiResponse: z.ZodType<
-  External$ApiResponse, // output type of this zod object
+const SchemaOut$ApiRes: z.ZodType<
+  External$ApiRes, // output type of this zod object
   z.ZodTypeDef,
-  ApiResponse // the object to be transformed
+  ApiRes // the object to be transformed
 > = z
   .object({
     code: z.number().int().optional(),
@@ -64,7 +64,7 @@ const SchemaOut$ApiResponse: z.ZodType<
     });
   });
 
-export const Schemas$ApiResponse = {
-  in: SchemaIn$ApiResponse,
-  out: SchemaOut$ApiResponse,
+export const Schemas$ApiRes = {
+  in: SchemaIn$ApiRes,
+  out: SchemaOut$ApiRes,
 };

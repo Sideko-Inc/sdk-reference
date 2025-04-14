@@ -11,8 +11,36 @@ describe("tests client.user.createWithList.create", () => {
       });
       // Get both raw response for status and parsed response for data
       const [rawResponse, response] = await Promise.all([
-        client.user.createWithList.create({ data: [{}] }).asResponse(),
-        client.user.createWithList.create({ data: [{}] }),
+        client.user.createWithList
+          .create({
+            data: [
+              {
+                email: "john@email.com",
+                firstName: "John",
+                id: 10,
+                lastName: "James",
+                password: "12345",
+                phone: "12345",
+                userStatus: 1,
+                username: "theUser",
+              },
+            ],
+          })
+          .asResponse(),
+        client.user.createWithList.create({
+          data: [
+            {
+              email: "john@email.com",
+              firstName: "John",
+              id: 10,
+              lastName: "James",
+              password: "12345",
+              phone: "12345",
+              userStatus: 1,
+              username: "theUser",
+            },
+          ],
+        }),
       ]);
       expect(rawResponse.status).toBe(200); // Exact status code match
       // Response body automatically validated by Zod schema during deserialization

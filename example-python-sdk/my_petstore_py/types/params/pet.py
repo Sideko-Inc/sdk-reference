@@ -1,6 +1,6 @@
+import pydantic
 import typing
 import typing_extensions
-import pydantic
 
 from .category import Category, _SerializerCategory
 from .tag import Tag, _SerializerTag

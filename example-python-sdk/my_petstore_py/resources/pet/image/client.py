@@ -1,5 +1,5 @@
+import httpx
 import typing
-import io
 
 from my_petstore_py.core import (
     AsyncBaseClient,
@@ -7,7 +7,9 @@ from my_petstore_py.core import (
     RequestOptions,
     SyncBaseClient,
     default_request_options,
-    encode_param,
+    encode_query_param,
+    to_content,
+    to_encodable,
     type_utils,
 )
 from my_petstore_py.types import models
@@ -20,7 +22,7 @@ class ImageClient:
     def upload(
         self,
         *,
-        data: typing.Union[typing.BinaryIO, io.BufferedReader],
+        data: httpx._types.FileTypes,
         pet_id: int,
         additional_metadata: typing.Union[
             typing.Optional[str], type_utils.NotGiven
@@ -28,14 +30,16 @@ class ImageClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> models.ApiResponse:
         """
+        uploads an image
+
 
 
         POST /pet/{petId}/uploadImage
 
         Args:
-            additionalMetadata: str
-            data: typing.Union[typing.BinaryIO, io.BufferedReader]
-            petId: int
+            additionalMetadata: Additional Metadata
+            data: httpx._types.FileTypes
+            petId: ID of pet to update
             request_options: Additional options to customize the HTTP request
 
         Returns:
@@ -47,14 +51,19 @@ class ImageClient:
 
         Examples:
         ```py
-        client.pet.image.upload(data=open("uploads/file.pdf", "rb"), pet_id=123)
+        client.pet.image.upload(data=open("./file.txt", "rb"), pet_id=123)
         ```
-
         """
         _query: QueryParams = {}
         if not isinstance(additional_metadata, type_utils.NotGiven):
-            _query["additionalMetadata"] = encode_param(additional_metadata, False)
-        _content = data.read()
+            encode_query_param(
+                _query,
+                "additionalMetadata",
+                to_encodable(item=additional_metadata, dump_with=str),
+                style="form",
+                explode=True,
+            )
+        _content = to_content(file=data)
         _content_type = "application/octet-stream"
         return self._base_client.request(
             method="POST",
@@ -75,7 +84,7 @@ class AsyncImageClient:
     async def upload(
         self,
         *,
-        data: typing.Union[typing.BinaryIO, io.BufferedReader],
+        data: httpx._types.FileTypes,
         pet_id: int,
         additional_metadata: typing.Union[
             typing.Optional[str], type_utils.NotGiven
@@ -83,14 +92,16 @@ class AsyncImageClient:
         request_options: typing.Optional[RequestOptions] = None,
     ) -> models.ApiResponse:
         """
+        uploads an image
+
 
 
         POST /pet/{petId}/uploadImage
 
         Args:
-            additionalMetadata: str
-            data: typing.Union[typing.BinaryIO, io.BufferedReader]
-            petId: int
+            additionalMetadata: Additional Metadata
+            data: httpx._types.FileTypes
+            petId: ID of pet to update
             request_options: Additional options to customize the HTTP request
 
         Returns:
@@ -102,14 +113,19 @@ class AsyncImageClient:
 
         Examples:
         ```py
-        await client.pet.image.upload(data=open("uploads/file.pdf", "rb"), pet_id=123)
+        await client.pet.image.upload(data=open("./file.txt", "rb"), pet_id=123)
         ```
-
         """
         _query: QueryParams = {}
         if not isinstance(additional_metadata, type_utils.NotGiven):
-            _query["additionalMetadata"] = encode_param(additional_metadata, False)
-        _content = data.read()
+            encode_query_param(
+                _query,
+                "additionalMetadata",
+                to_encodable(item=additional_metadata, dump_with=str),
+                style="form",
+                explode=True,
+            )
+        _content = to_content(file=data)
         _content_type = "application/octet-stream"
         return await self._base_client.request(
             method="POST",

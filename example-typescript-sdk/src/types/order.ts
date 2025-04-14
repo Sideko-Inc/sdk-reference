@@ -1,4 +1,3 @@
-import { External$OrderStatusEnum, OrderStatusEnum } from "./order-status-enum";
 import { zodTransform } from "my_petstore_ts/core";
 import * as z from "zod";
 
@@ -14,7 +13,7 @@ export type Order = {
   /**
    * Order Status
    */
-  status?: OrderStatusEnum | undefined;
+  status?: ("approved" | "delivered" | "placed") | undefined;
 };
 
 /**
@@ -28,7 +27,7 @@ export type External$Order = {
   petId?: number | undefined;
   quantity?: number | undefined;
   shipDate?: string | undefined;
-  status?: External$OrderStatusEnum | undefined;
+  status?: ("approved" | "delivered" | "placed") | undefined;
 };
 
 /**

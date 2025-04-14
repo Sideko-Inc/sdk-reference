@@ -1,5 +1,5 @@
-import pytest
 import pydantic
+import pytest
 
 from my_petstore_py import AsyncClient, Client
 from my_petstore_py.environment import Environment
@@ -14,7 +14,7 @@ def test_get_200_generated_success():
     Expected Status: 200
     Mode: Synchronous execution
 
-    Response : GetStoreInventoryResponse
+    Response : models.StoreInventoryGetResponse
 
     Validates:
     - Authentication requirements are satisfied
@@ -29,8 +29,12 @@ def test_get_200_generated_success():
         api_key="API_KEY", oauth_token="API_TOKEN", environment=Environment.MOCK_SERVER
     )
     response = client.store.inventory.get()
-    adapter = pydantic.TypeAdapter(models.GetStoreInventoryResponse)
-    adapter.validate_python(response)
+    try:
+        pydantic.TypeAdapter(models.StoreInventoryGetResponse).validate_python(response)
+        is_json = True
+    except pydantic.ValidationError:
+        is_json = False
+    assert is_json, "failed response type check"
 
 
 @pytest.mark.asyncio
@@ -42,7 +46,7 @@ async def test_await_get_200_generated_success():
     Expected Status: 200
     Mode: Asynchronous execution
 
-    Response : GetStoreInventoryResponse
+    Response : models.StoreInventoryGetResponse
 
     Validates:
     - Authentication requirements are satisfied
@@ -57,5 +61,9 @@ async def test_await_get_200_generated_success():
         api_key="API_KEY", oauth_token="API_TOKEN", environment=Environment.MOCK_SERVER
     )
     response = await client.store.inventory.get()
-    adapter = pydantic.TypeAdapter(models.GetStoreInventoryResponse)
-    adapter.validate_python(response)
+    try:
+        pydantic.TypeAdapter(models.StoreInventoryGetResponse).validate_python(response)
+        is_json = True
+    except pydantic.ValidationError:
+        is_json = False
+    assert is_json, "failed response type check"

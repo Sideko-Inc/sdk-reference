@@ -15,7 +15,6 @@ const client = new Client({
   apiKey: process.env["API_KEY"]!!,
   oauthToken: process.env["API_TOKEN"]!!,
 });
-
 const res = await client.store.order.delete({ orderId: 123 });
 ```
 
@@ -35,7 +34,6 @@ const client = new Client({
   apiKey: process.env["API_KEY"]!!,
   oauthToken: process.env["API_TOKEN"]!!,
 });
-
 const res = await client.store.order.get({ orderId: 123 });
 ```
 
@@ -55,6 +53,5 @@ const client = new Client({
   apiKey: process.env["API_KEY"]!!,
   oauthToken: process.env["API_TOKEN"]!!,
 });
-
 const res = await client.store.order.place();
 ```

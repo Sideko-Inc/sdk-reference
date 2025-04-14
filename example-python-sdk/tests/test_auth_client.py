@@ -1,8 +1,9 @@
-import pytest
-import typing
+import httpx
 import pydantic
+import pytest
 
 from my_petstore_py import AsyncClient, Client
+from my_petstore_py.core import BinaryResponse
 from my_petstore_py.environment import Environment
 
 
@@ -14,7 +15,7 @@ def test_logout_default_generated_success():
     Expected Status: default
     Mode: Synchronous execution
 
-    Empty response expected
+    Response : httpx.Response
 
     Validates:
     - Authentication requirements are satisfied
@@ -29,8 +30,7 @@ def test_logout_default_generated_success():
         api_key="API_KEY", oauth_token="API_TOKEN", environment=Environment.MOCK_SERVER
     )
     response = client.auth.logout()
-    adapter = pydantic.TypeAdapter(None)
-    adapter.validate_python(response)
+    assert isinstance(response, httpx.Response)
 
 
 @pytest.mark.asyncio
@@ -42,7 +42,7 @@ async def test_await_logout_default_generated_success():
     Expected Status: default
     Mode: Asynchronous execution
 
-    Empty response expected
+    Response : httpx.Response
 
     Validates:
     - Authentication requirements are satisfied
@@ -57,8 +57,7 @@ async def test_await_logout_default_generated_success():
         api_key="API_KEY", oauth_token="API_TOKEN", environment=Environment.MOCK_SERVER
     )
     response = await client.auth.logout()
-    adapter = pydantic.TypeAdapter(None)
-    adapter.validate_python(response)
+    assert isinstance(response, httpx.Response)
 
 
 def test_login_200_generated_success():
@@ -69,7 +68,7 @@ def test_login_200_generated_success():
     Expected Status: 200
     Mode: Synchronous execution
 
-    Response : typing.Union[str, str]
+    Response : typing.Union[str, BinaryResponse]
 
     Validates:
     - Authentication requirements are satisfied
@@ -84,8 +83,13 @@ def test_login_200_generated_success():
         api_key="API_KEY", oauth_token="API_TOKEN", environment=Environment.MOCK_SERVER
     )
     response = client.auth.login()
-    adapter = pydantic.TypeAdapter(typing.Union[str, str])
-    adapter.validate_python(response)
+    try:
+        pydantic.TypeAdapter(str).validate_python(response)
+        is_json = True
+    except pydantic.ValidationError:
+        is_json = False
+    is_binary = isinstance(response, BinaryResponse)
+    assert any([is_json, is_binary]), "failed response type check"
 
 
 @pytest.mark.asyncio
@@ -97,7 +101,7 @@ async def test_await_login_200_generated_success():
     Expected Status: 200
     Mode: Asynchronous execution
 
-    Response : typing.Union[str, str]
+    Response : typing.Union[str, BinaryResponse]
 
     Validates:
     - Authentication requirements are satisfied
@@ -112,5 +116,10 @@ async def test_await_login_200_generated_success():
         api_key="API_KEY", oauth_token="API_TOKEN", environment=Environment.MOCK_SERVER
     )
     response = await client.auth.login()
-    adapter = pydantic.TypeAdapter(typing.Union[str, str])
-    adapter.validate_python(response)
+    try:
+        pydantic.TypeAdapter(str).validate_python(response)
+        is_json = True
+    except pydantic.ValidationError:
+        is_json = False
+    is_binary = isinstance(response, BinaryResponse)
+    assert any([is_json, is_binary]), "failed response type check"

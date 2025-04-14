@@ -1,7 +1,9 @@
+import httpx
 import typing
 
 from my_petstore_py.core import (
     AsyncBaseClient,
+    BinaryResponse,
     RequestOptions,
     SyncBaseClient,
     default_request_options,
@@ -12,30 +14,30 @@ from my_petstore_py.resources.user.create_with_list import (
     AsyncCreateWithListClient,
     CreateWithListClient,
 )
-from my_petstore_py import BinaryResponse
 from my_petstore_py.types import models, params
 
 
 class UserClient:
     def __init__(self, *, base_client: SyncBaseClient):
         self._base_client = base_client
-
         self.create_with_list = CreateWithListClient(base_client=self._base_client)
 
     def delete(
         self, *, username: str, request_options: typing.Optional[RequestOptions] = None
-    ) -> BinaryResponse:
+    ) -> httpx.Response:
         """
+        Delete user
+
         This can only be done by the logged in user.
 
         DELETE /user/{username}
 
         Args:
-            username: str
+            username: The name that needs to be deleted
             request_options: Additional options to customize the HTTP request
 
         Returns:
-            None
+            Generated default response
 
         Raises:
             ApiError: A custom exception class that provides additional context
@@ -45,25 +47,26 @@ class UserClient:
         ```py
         client.user.delete(username="string")
         ```
-
         """
         return self._base_client.request(
             method="DELETE",
             path=f"/user/{username}",
-            cast_to=BinaryResponse,
+            cast_to=httpx.Response,
             request_options=request_options or default_request_options(),
         )
 
     def get(
         self, *, username: str, request_options: typing.Optional[RequestOptions] = None
-    ) -> typing.Union[models.User, models.User]:
+    ) -> typing.Union[models.User, BinaryResponse]:
         """
+        Get user by user name
+
 
 
         GET /user/{username}
 
         Args:
-            username: str
+            username: The name that needs to be fetched. Use user1 for testing.
             request_options: Additional options to customize the HTTP request
 
         Returns:
@@ -77,19 +80,18 @@ class UserClient:
         ```py
         client.user.get(username="string")
         ```
-
         """
         return self._base_client.request(
             method="GET",
             path=f"/user/{username}",
-            cast_to=typing.Union[models.User, models.User],
+            cast_to=typing.Union[models.User, BinaryResponse],
             request_options=request_options or default_request_options(),
         )
 
     def create(
         self,
         *,
-        email_field: typing.Union[
+        email: typing.Union[
             typing.Optional[str], type_utils.NotGiven
         ] = type_utils.NOT_GIVEN,
         first_name: typing.Union[
@@ -114,8 +116,10 @@ class UserClient:
             typing.Optional[str], type_utils.NotGiven
         ] = type_utils.NOT_GIVEN,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Union[models.User, models.User]:
+    ) -> typing.Union[models.User, BinaryResponse]:
         """
+        Create user
+
         This can only be done by the logged in user.
 
         POST /user
@@ -141,7 +145,7 @@ class UserClient:
         Examples:
         ```py
         client.user.create(
-            email_field="john@email.com",
+            email="john@email.com",
             first_name="John",
             id=10,
             last_name="James",
@@ -151,11 +155,10 @@ class UserClient:
             username="theUser",
         )
         ```
-
         """
         _json = to_encodable(
             item={
-                "email_field": email_field,
+                "email": email,
                 "first_name": first_name,
                 "id": id,
                 "last_name": last_name,
@@ -170,7 +173,7 @@ class UserClient:
             method="POST",
             path="/user",
             json=_json,
-            cast_to=typing.Union[models.User, models.User],
+            cast_to=typing.Union[models.User, BinaryResponse],
             request_options=request_options or default_request_options(),
         )
 
@@ -178,7 +181,7 @@ class UserClient:
         self,
         *,
         username_path: str,
-        email_field: typing.Union[
+        email: typing.Union[
             typing.Optional[str], type_utils.NotGiven
         ] = type_utils.NOT_GIVEN,
         first_name: typing.Union[
@@ -203,8 +206,10 @@ class UserClient:
             typing.Optional[str], type_utils.NotGiven
         ] = type_utils.NOT_GIVEN,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> None:
+    ) -> httpx.Response:
         """
+        Update user
+
         This can only be done by the logged in user.
 
         PUT /user/{username}
@@ -218,7 +223,7 @@ class UserClient:
             phone: str
             userStatus: User Status
             username: str
-            username_path: str
+            username_path: name that needs to be updated
             request_options: Additional options to customize the HTTP request
 
         Returns:
@@ -232,7 +237,7 @@ class UserClient:
         ```py
         client.user.update(
             username_path="string",
-            email_field="john@email.com",
+            email="john@email.com",
             first_name="John",
             id=10,
             last_name="James",
@@ -242,11 +247,10 @@ class UserClient:
             username="theUser",
         )
         ```
-
         """
         _json = to_encodable(
             item={
-                "email_field": email_field,
+                "email": email,
                 "first_name": first_name,
                 "id": id,
                 "last_name": last_name,
@@ -257,11 +261,11 @@ class UserClient:
             },
             dump_with=params._SerializerUser,
         )
-        self._base_client.request(
+        return self._base_client.request(
             method="PUT",
             path=f"/user/{username_path}",
             json=_json,
-            cast_to=type(None),
+            cast_to=httpx.Response,
             request_options=request_options or default_request_options(),
         )
 
@@ -269,23 +273,24 @@ class UserClient:
 class AsyncUserClient:
     def __init__(self, *, base_client: AsyncBaseClient):
         self._base_client = base_client
-
         self.create_with_list = AsyncCreateWithListClient(base_client=self._base_client)
 
     async def delete(
         self, *, username: str, request_options: typing.Optional[RequestOptions] = None
-    ) -> BinaryResponse:
+    ) -> httpx.Response:
         """
+        Delete user
+
         This can only be done by the logged in user.
 
         DELETE /user/{username}
 
         Args:
-            username: str
+            username: The name that needs to be deleted
             request_options: Additional options to customize the HTTP request
 
         Returns:
-            None
+            Generated default response
 
         Raises:
             ApiError: A custom exception class that provides additional context
@@ -295,25 +300,26 @@ class AsyncUserClient:
         ```py
         await client.user.delete(username="string")
         ```
-
         """
         return await self._base_client.request(
             method="DELETE",
             path=f"/user/{username}",
-            cast_to=BinaryResponse,
+            cast_to=httpx.Response,
             request_options=request_options or default_request_options(),
         )
 
     async def get(
         self, *, username: str, request_options: typing.Optional[RequestOptions] = None
-    ) -> typing.Union[models.User, models.User]:
+    ) -> typing.Union[models.User, BinaryResponse]:
         """
+        Get user by user name
+
 
 
         GET /user/{username}
 
         Args:
-            username: str
+            username: The name that needs to be fetched. Use user1 for testing.
             request_options: Additional options to customize the HTTP request
 
         Returns:
@@ -327,19 +333,18 @@ class AsyncUserClient:
         ```py
         await client.user.get(username="string")
         ```
-
         """
         return await self._base_client.request(
             method="GET",
             path=f"/user/{username}",
-            cast_to=typing.Union[models.User, models.User],
+            cast_to=typing.Union[models.User, BinaryResponse],
             request_options=request_options or default_request_options(),
         )
 
     async def create(
         self,
         *,
-        email_field: typing.Union[
+        email: typing.Union[
             typing.Optional[str], type_utils.NotGiven
         ] = type_utils.NOT_GIVEN,
         first_name: typing.Union[
@@ -364,8 +369,10 @@ class AsyncUserClient:
             typing.Optional[str], type_utils.NotGiven
         ] = type_utils.NOT_GIVEN,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Union[models.User, models.User]:
+    ) -> typing.Union[models.User, BinaryResponse]:
         """
+        Create user
+
         This can only be done by the logged in user.
 
         POST /user
@@ -391,7 +398,7 @@ class AsyncUserClient:
         Examples:
         ```py
         await client.user.create(
-            email_field="john@email.com",
+            email="john@email.com",
             first_name="John",
             id=10,
             last_name="James",
@@ -401,11 +408,10 @@ class AsyncUserClient:
             username="theUser",
         )
         ```
-
         """
         _json = to_encodable(
             item={
-                "email_field": email_field,
+                "email": email,
                 "first_name": first_name,
                 "id": id,
                 "last_name": last_name,
@@ -420,7 +426,7 @@ class AsyncUserClient:
             method="POST",
             path="/user",
             json=_json,
-            cast_to=typing.Union[models.User, models.User],
+            cast_to=typing.Union[models.User, BinaryResponse],
             request_options=request_options or default_request_options(),
         )
 
@@ -428,7 +434,7 @@ class AsyncUserClient:
         self,
         *,
         username_path: str,
-        email_field: typing.Union[
+        email: typing.Union[
             typing.Optional[str], type_utils.NotGiven
         ] = type_utils.NOT_GIVEN,
         first_name: typing.Union[
@@ -453,8 +459,10 @@ class AsyncUserClient:
             typing.Optional[str], type_utils.NotGiven
         ] = type_utils.NOT_GIVEN,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> None:
+    ) -> httpx.Response:
         """
+        Update user
+
         This can only be done by the logged in user.
 
         PUT /user/{username}
@@ -468,7 +476,7 @@ class AsyncUserClient:
             phone: str
             userStatus: User Status
             username: str
-            username_path: str
+            username_path: name that needs to be updated
             request_options: Additional options to customize the HTTP request
 
         Returns:
@@ -482,7 +490,7 @@ class AsyncUserClient:
         ```py
         await client.user.update(
             username_path="string",
-            email_field="john@email.com",
+            email="john@email.com",
             first_name="John",
             id=10,
             last_name="James",
@@ -492,11 +500,10 @@ class AsyncUserClient:
             username="theUser",
         )
         ```
-
         """
         _json = to_encodable(
             item={
-                "email_field": email_field,
+                "email": email,
                 "first_name": first_name,
                 "id": id,
                 "last_name": last_name,
@@ -511,6 +518,6 @@ class AsyncUserClient:
             method="PUT",
             path=f"/user/{username_path}",
             json=_json,
-            cast_to=type(None),
+            cast_to=httpx.Response,
             request_options=request_options or default_request_options(),
         )

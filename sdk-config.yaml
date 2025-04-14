@@ -1,4 +1,4 @@
-api: my-petstore # an API id from a private Sideko org for the petstore API specification
+api: petstore  # an API id from a private Sideko org for the petstore API specification
 languages:
   python:
     sdk_name: my_petstore_py

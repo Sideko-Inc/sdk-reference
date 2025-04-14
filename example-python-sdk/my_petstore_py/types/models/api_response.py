@@ -1,5 +1,5 @@
-import typing
 import pydantic
+import typing
 
 
 class ApiResponse(pydantic.BaseModel):
@@ -12,6 +12,6 @@ class ApiResponse(pydantic.BaseModel):
         populate_by_name=True,
     )
 
-    code_field: typing.Optional[int] = pydantic.Field(alias="code", default=None)
+    code: typing.Optional[int] = pydantic.Field(alias="code", default=None)
     message: typing.Optional[str] = pydantic.Field(alias="message", default=None)
-    type_field: typing.Optional[str] = pydantic.Field(alias="type", default=None)
+    type_: typing.Optional[str] = pydantic.Field(alias="type", default=None)

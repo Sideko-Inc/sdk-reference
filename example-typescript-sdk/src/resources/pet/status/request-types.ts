@@ -1,15 +1,14 @@
 import { zodTransform } from "my_petstore_ts/core";
-import {
-  External$GetPetFindByStatusStatusEnum,
-  GetPetFindByStatusStatusEnum,
-} from "my_petstore_ts/types/get-pet-find-by-status-status-enum";
 import * as z from "zod";
 
 /**
  * ListRequest
  */
 export type ListRequest = {
-  status?: GetPetFindByStatusStatusEnum | undefined;
+  /**
+   * Status values that need to be considered for filter
+   */
+  status?: ("available" | "pending" | "sold") | undefined;
 };
 
 /**
@@ -18,7 +17,7 @@ export type ListRequest = {
  * we expect to come in as network data
  */
 export type External$ListRequest = {
-  status?: External$GetPetFindByStatusStatusEnum | undefined;
+  status?: ("available" | "pending" | "sold") | undefined;
 };
 
 /**

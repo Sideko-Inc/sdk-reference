@@ -5,7 +5,13 @@ import * as z from "zod";
  * LoginRequest
  */
 export type LoginRequest = {
+  /**
+   * The password for login in clear text
+   */
   password?: string | undefined;
+  /**
+   * The user name for login
+   */
   username?: string | undefined;
 };
 

@@ -5,6 +5,9 @@ import * as z from "zod";
  * ListRequest
  */
 export type ListRequest = {
+  /**
+   * Tags to filter by
+   */
   tags?: string[] | undefined;
 };
 

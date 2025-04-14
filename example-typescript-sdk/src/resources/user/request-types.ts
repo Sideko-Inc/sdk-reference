@@ -5,6 +5,9 @@ import * as z from "zod";
  * DeleteRequest
  */
 export type DeleteRequest = {
+  /**
+   * The name that needs to be deleted
+   */
   username: string;
 };
 
@@ -61,6 +64,9 @@ export const Schemas$DeleteRequest = {
  * GetRequest
  */
 export type GetRequest = {
+  /**
+   * The name that needs to be fetched. Use user1 for testing.
+   */
   username: string;
 };
 
@@ -229,6 +235,9 @@ export type UpdateRequest = {
    */
   userStatus?: number | undefined;
   username?: string | undefined;
+  /**
+   * name that needs to be updated
+   */
   usernamePath: string;
 };
 

@@ -22,7 +22,7 @@ export class Client {
 
   constructor(opts?: ClientOptions) {
     const baseUrl =
-      opts?.baseUrl ?? opts?.environment ?? Environment.Environment;
+      opts?.baseUrl ?? opts?.environment ?? Environment.Production;
     this._client = new CoreClient({ baseUrl, timeout: opts?.timeout });
     this._client.registerAuth(
       "api_key",

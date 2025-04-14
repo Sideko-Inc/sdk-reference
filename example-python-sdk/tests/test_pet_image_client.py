@@ -1,5 +1,5 @@
-import pytest
 import pydantic
+import pytest
 
 from my_petstore_py import AsyncClient, Client
 from my_petstore_py.environment import Environment
@@ -14,7 +14,7 @@ def test_upload_200_success_default():
     Expected Status: 200
     Mode: Synchronous execution
 
-    Response : ApiResponse
+    Response : models.ApiResponse
 
     Validates:
     - Authentication requirements are satisfied
@@ -28,9 +28,13 @@ def test_upload_200_success_default():
     client = Client(
         api_key="API_KEY", oauth_token="API_TOKEN", environment=Environment.MOCK_SERVER
     )
-    response = client.pet.image.upload(data=open("uploads/file.pdf", "rb"), pet_id=123)
-    adapter = pydantic.TypeAdapter(models.ApiResponse)
-    adapter.validate_python(response)
+    response = client.pet.image.upload(data=open("./file.txt", "rb"), pet_id=123)
+    try:
+        pydantic.TypeAdapter(models.ApiResponse).validate_python(response)
+        is_json = True
+    except pydantic.ValidationError:
+        is_json = False
+    assert is_json, "failed response type check"
 
 
 @pytest.mark.asyncio
@@ -42,7 +46,7 @@ async def test_await_upload_200_success_default():
     Expected Status: 200
     Mode: Asynchronous execution
 
-    Response : ApiResponse
+    Response : models.ApiResponse
 
     Validates:
     - Authentication requirements are satisfied
@@ -56,8 +60,10 @@ async def test_await_upload_200_success_default():
     client = AsyncClient(
         api_key="API_KEY", oauth_token="API_TOKEN", environment=Environment.MOCK_SERVER
     )
-    response = await client.pet.image.upload(
-        data=open("uploads/file.pdf", "rb"), pet_id=123
-    )
-    adapter = pydantic.TypeAdapter(models.ApiResponse)
-    adapter.validate_python(response)
+    response = await client.pet.image.upload(data=open("./file.txt", "rb"), pet_id=123)
+    try:
+        pydantic.TypeAdapter(models.ApiResponse).validate_python(response)
+        is_json = True
+    except pydantic.ValidationError:
+        is_json = False
+    assert is_json, "failed response type check"

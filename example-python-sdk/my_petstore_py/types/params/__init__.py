@@ -1,8 +1,8 @@
 from .category import Category, _SerializerCategory
-from .tag import Tag, _SerializerTag
 from .order import Order, _SerializerOrder
-from .user import User, _SerializerUser
 from .pet import Pet, _SerializerPet
+from .tag import Tag, _SerializerTag
+from .user import User, _SerializerUser
 
 
 __all__ = [

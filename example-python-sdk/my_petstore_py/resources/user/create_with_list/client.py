@@ -2,6 +2,7 @@ import typing
 
 from my_petstore_py.core import (
     AsyncBaseClient,
+    BinaryResponse,
     RequestOptions,
     SyncBaseClient,
     default_request_options,
@@ -19,8 +20,10 @@ class CreateWithListClient:
         *,
         data: typing.List[params.User],
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Union[models.User, models.User]:
+    ) -> typing.Union[models.User, BinaryResponse]:
         """
+        Creates list of users with given input array
+
         Creates list of users with given input array
 
         POST /user/createWithList
@@ -38,16 +41,28 @@ class CreateWithListClient:
 
         Examples:
         ```py
-        client.user.create_with_list.create(data=[{}])
+        client.user.create_with_list.create(
+            data=[
+                {
+                    "email": "john@email.com",
+                    "first_name": "John",
+                    "id": 10,
+                    "last_name": "James",
+                    "password": "12345",
+                    "phone": "12345",
+                    "user_status": 1,
+                    "username": "theUser",
+                }
+            ]
+        )
         ```
-
         """
         _json = to_encodable(item=data, dump_with=typing.List[params._SerializerUser])
         return self._base_client.request(
             method="POST",
             path="/user/createWithList",
             json=_json,
-            cast_to=typing.Union[models.User, models.User],
+            cast_to=typing.Union[models.User, BinaryResponse],
             request_options=request_options or default_request_options(),
         )
 
@@ -61,8 +76,10 @@ class AsyncCreateWithListClient:
         *,
         data: typing.List[params.User],
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Union[models.User, models.User]:
+    ) -> typing.Union[models.User, BinaryResponse]:
         """
+        Creates list of users with given input array
+
         Creates list of users with given input array
 
         POST /user/createWithList
@@ -80,15 +97,27 @@ class AsyncCreateWithListClient:
 
         Examples:
         ```py
-        await client.user.create_with_list.create(data=[{}])
+        await client.user.create_with_list.create(
+            data=[
+                {
+                    "email": "john@email.com",
+                    "first_name": "John",
+                    "id": 10,
+                    "last_name": "James",
+                    "password": "12345",
+                    "phone": "12345",
+                    "user_status": 1,
+                    "username": "theUser",
+                }
+            ]
+        )
         ```
-
         """
         _json = to_encodable(item=data, dump_with=typing.List[params._SerializerUser])
         return await self._base_client.request(
             method="POST",
             path="/user/createWithList",
             json=_json,
-            cast_to=typing.Union[models.User, models.User],
+            cast_to=typing.Union[models.User, BinaryResponse],
             request_options=request_options or default_request_options(),
         )

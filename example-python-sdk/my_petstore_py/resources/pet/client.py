@@ -1,47 +1,47 @@
+import httpx
 import typing
 import typing_extensions
 
 from my_petstore_py.core import (
     AsyncBaseClient,
+    BinaryResponse,
     QueryParams,
     RequestOptions,
     SyncBaseClient,
     default_request_options,
-    encode_param,
+    encode_query_param,
     to_encodable,
     type_utils,
 )
+from my_petstore_py.resources.pet.image import AsyncImageClient, ImageClient
 from my_petstore_py.resources.pet.status import AsyncStatusClient, StatusClient
 from my_petstore_py.resources.pet.tag import AsyncTagClient, TagClient
-from my_petstore_py.resources.pet.image import AsyncImageClient, ImageClient
-from my_petstore_py import BinaryResponse
 from my_petstore_py.types import models, params
 
 
 class PetClient:
     def __init__(self, *, base_client: SyncBaseClient):
         self._base_client = base_client
-
         self.status = StatusClient(base_client=self._base_client)
-
         self.tag = TagClient(base_client=self._base_client)
-
         self.image = ImageClient(base_client=self._base_client)
 
     def delete(
         self, *, pet_id: int, request_options: typing.Optional[RequestOptions] = None
-    ) -> BinaryResponse:
+    ) -> httpx.Response:
         """
+        Deletes a pet
+
 
 
         DELETE /pet/{petId}
 
         Args:
-            petId: int
+            petId: Pet id to delete
             request_options: Additional options to customize the HTTP request
 
         Returns:
-            None
+            Generated default response
 
         Raises:
             ApiError: A custom exception class that provides additional context
@@ -51,26 +51,27 @@ class PetClient:
         ```py
         client.pet.delete(pet_id=123)
         ```
-
         """
         return self._base_client.request(
             method="DELETE",
             path=f"/pet/{pet_id}",
             auth_names=["petstore_auth"],
-            cast_to=BinaryResponse,
+            cast_to=httpx.Response,
             request_options=request_options or default_request_options(),
         )
 
     def get(
         self, *, pet_id: int, request_options: typing.Optional[RequestOptions] = None
-    ) -> typing.Union[models.Pet, models.Pet]:
+    ) -> typing.Union[models.Pet, BinaryResponse]:
         """
+        Find pet by ID
+
         Returns a single pet
 
         GET /pet/{petId}
 
         Args:
-            petId: int
+            petId: ID of pet to return
             request_options: Additional options to customize the HTTP request
 
         Returns:
@@ -84,13 +85,12 @@ class PetClient:
         ```py
         client.pet.get(pet_id=123)
         ```
-
         """
         return self._base_client.request(
             method="GET",
             path=f"/pet/{pet_id}",
             auth_names=["api_key", "petstore_auth"],
-            cast_to=typing.Union[models.Pet, models.Pet],
+            cast_to=typing.Union[models.Pet, BinaryResponse],
             request_options=request_options or default_request_options(),
         )
 
@@ -113,8 +113,10 @@ class PetClient:
             typing.Optional[typing.List[params.Tag]], type_utils.NotGiven
         ] = type_utils.NOT_GIVEN,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Union[models.Pet, models.Pet]:
+    ) -> typing.Union[models.Pet, BinaryResponse]:
         """
+        Add a new pet to the store
+
         Add a new pet to the store
 
         POST /pet
@@ -139,7 +141,6 @@ class PetClient:
         ```py
         client.pet.create(name="doggie", photo_urls=["string"], id=10)
         ```
-
         """
         _json = to_encodable(
             item={
@@ -157,7 +158,7 @@ class PetClient:
             path="/pet",
             auth_names=["petstore_auth"],
             json=_json,
-            cast_to=typing.Union[models.Pet, models.Pet],
+            cast_to=typing.Union[models.Pet, BinaryResponse],
             request_options=request_options or default_request_options(),
         )
 
@@ -172,20 +173,22 @@ class PetClient:
             typing.Optional[str], type_utils.NotGiven
         ] = type_utils.NOT_GIVEN,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> BinaryResponse:
+    ) -> httpx.Response:
         """
+        Updates a pet in the store with form data
+
 
 
         POST /pet/{petId}
 
         Args:
-            name: str
-            status: str
-            petId: int
+            name: Name of pet that needs to be updated
+            status: Status of pet that needs to be updated
+            petId: ID of pet that needs to be updated
             request_options: Additional options to customize the HTTP request
 
         Returns:
-            None
+            Generated default response
 
         Raises:
             ApiError: A custom exception class that provides additional context
@@ -195,19 +198,30 @@ class PetClient:
         ```py
         client.pet.update_form(pet_id=123)
         ```
-
         """
         _query: QueryParams = {}
         if not isinstance(name, type_utils.NotGiven):
-            _query["name"] = encode_param(name, False)
+            encode_query_param(
+                _query,
+                "name",
+                to_encodable(item=name, dump_with=str),
+                style="form",
+                explode=True,
+            )
         if not isinstance(status, type_utils.NotGiven):
-            _query["status"] = encode_param(status, False)
+            encode_query_param(
+                _query,
+                "status",
+                to_encodable(item=status, dump_with=str),
+                style="form",
+                explode=True,
+            )
         return self._base_client.request(
             method="POST",
             path=f"/pet/{pet_id}",
             auth_names=["petstore_auth"],
             query_params=_query,
-            cast_to=BinaryResponse,
+            cast_to=httpx.Response,
             request_options=request_options or default_request_options(),
         )
 
@@ -230,8 +244,10 @@ class PetClient:
             typing.Optional[typing.List[params.Tag]], type_utils.NotGiven
         ] = type_utils.NOT_GIVEN,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Union[models.Pet, models.Pet]:
+    ) -> typing.Union[models.Pet, BinaryResponse]:
         """
+        Update an existing pet
+
         Update an existing pet by Id
 
         PUT /pet
@@ -256,7 +272,6 @@ class PetClient:
         ```py
         client.pet.update(name="doggie", photo_urls=["string"], id=10)
         ```
-
         """
         _json = to_encodable(
             item={
@@ -274,7 +289,7 @@ class PetClient:
             path="/pet",
             auth_names=["petstore_auth"],
             json=_json,
-            cast_to=typing.Union[models.Pet, models.Pet],
+            cast_to=typing.Union[models.Pet, BinaryResponse],
             request_options=request_options or default_request_options(),
         )
 
@@ -282,27 +297,26 @@ class PetClient:
 class AsyncPetClient:
     def __init__(self, *, base_client: AsyncBaseClient):
         self._base_client = base_client
-
         self.status = AsyncStatusClient(base_client=self._base_client)
-
         self.tag = AsyncTagClient(base_client=self._base_client)
-
         self.image = AsyncImageClient(base_client=self._base_client)
 
     async def delete(
         self, *, pet_id: int, request_options: typing.Optional[RequestOptions] = None
-    ) -> BinaryResponse:
+    ) -> httpx.Response:
         """
+        Deletes a pet
+
 
 
         DELETE /pet/{petId}
 
         Args:
-            petId: int
+            petId: Pet id to delete
             request_options: Additional options to customize the HTTP request
 
         Returns:
-            None
+            Generated default response
 
         Raises:
             ApiError: A custom exception class that provides additional context
@@ -312,26 +326,27 @@ class AsyncPetClient:
         ```py
         await client.pet.delete(pet_id=123)
         ```
-
         """
         return await self._base_client.request(
             method="DELETE",
             path=f"/pet/{pet_id}",
             auth_names=["petstore_auth"],
-            cast_to=BinaryResponse,
+            cast_to=httpx.Response,
             request_options=request_options or default_request_options(),
         )
 
     async def get(
         self, *, pet_id: int, request_options: typing.Optional[RequestOptions] = None
-    ) -> typing.Union[models.Pet, models.Pet]:
+    ) -> typing.Union[models.Pet, BinaryResponse]:
         """
+        Find pet by ID
+
         Returns a single pet
 
         GET /pet/{petId}
 
         Args:
-            petId: int
+            petId: ID of pet to return
             request_options: Additional options to customize the HTTP request
 
         Returns:
@@ -345,13 +360,12 @@ class AsyncPetClient:
         ```py
         await client.pet.get(pet_id=123)
         ```
-
         """
         return await self._base_client.request(
             method="GET",
             path=f"/pet/{pet_id}",
             auth_names=["api_key", "petstore_auth"],
-            cast_to=typing.Union[models.Pet, models.Pet],
+            cast_to=typing.Union[models.Pet, BinaryResponse],
             request_options=request_options or default_request_options(),
         )
 
@@ -374,8 +388,10 @@ class AsyncPetClient:
             typing.Optional[typing.List[params.Tag]], type_utils.NotGiven
         ] = type_utils.NOT_GIVEN,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Union[models.Pet, models.Pet]:
+    ) -> typing.Union[models.Pet, BinaryResponse]:
         """
+        Add a new pet to the store
+
         Add a new pet to the store
 
         POST /pet
@@ -400,7 +416,6 @@ class AsyncPetClient:
         ```py
         await client.pet.create(name="doggie", photo_urls=["string"], id=10)
         ```
-
         """
         _json = to_encodable(
             item={
@@ -418,7 +433,7 @@ class AsyncPetClient:
             path="/pet",
             auth_names=["petstore_auth"],
             json=_json,
-            cast_to=typing.Union[models.Pet, models.Pet],
+            cast_to=typing.Union[models.Pet, BinaryResponse],
             request_options=request_options or default_request_options(),
         )
 
@@ -433,20 +448,22 @@ class AsyncPetClient:
             typing.Optional[str], type_utils.NotGiven
         ] = type_utils.NOT_GIVEN,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> BinaryResponse:
+    ) -> httpx.Response:
         """
+        Updates a pet in the store with form data
+
 
 
         POST /pet/{petId}
 
         Args:
-            name: str
-            status: str
-            petId: int
+            name: Name of pet that needs to be updated
+            status: Status of pet that needs to be updated
+            petId: ID of pet that needs to be updated
             request_options: Additional options to customize the HTTP request
 
         Returns:
-            None
+            Generated default response
 
         Raises:
             ApiError: A custom exception class that provides additional context
@@ -456,19 +473,30 @@ class AsyncPetClient:
         ```py
         await client.pet.update_form(pet_id=123)
         ```
-
         """
         _query: QueryParams = {}
         if not isinstance(name, type_utils.NotGiven):
-            _query["name"] = encode_param(name, False)
+            encode_query_param(
+                _query,
+                "name",
+                to_encodable(item=name, dump_with=str),
+                style="form",
+                explode=True,
+            )
         if not isinstance(status, type_utils.NotGiven):
-            _query["status"] = encode_param(status, False)
+            encode_query_param(
+                _query,
+                "status",
+                to_encodable(item=status, dump_with=str),
+                style="form",
+                explode=True,
+            )
         return await self._base_client.request(
             method="POST",
             path=f"/pet/{pet_id}",
             auth_names=["petstore_auth"],
             query_params=_query,
-            cast_to=BinaryResponse,
+            cast_to=httpx.Response,
             request_options=request_options or default_request_options(),
         )
 
@@ -491,8 +519,10 @@ class AsyncPetClient:
             typing.Optional[typing.List[params.Tag]], type_utils.NotGiven
         ] = type_utils.NOT_GIVEN,
         request_options: typing.Optional[RequestOptions] = None,
-    ) -> typing.Union[models.Pet, models.Pet]:
+    ) -> typing.Union[models.Pet, BinaryResponse]:
         """
+        Update an existing pet
+
         Update an existing pet by Id
 
         PUT /pet
@@ -517,7 +547,6 @@ class AsyncPetClient:
         ```py
         await client.pet.update(name="doggie", photo_urls=["string"], id=10)
         ```
-
         """
         _json = to_encodable(
             item={
@@ -535,6 +564,6 @@ class AsyncPetClient:
             path="/pet",
             auth_names=["petstore_auth"],
             json=_json,
-            cast_to=typing.Union[models.Pet, models.Pet],
+            cast_to=typing.Union[models.Pet, BinaryResponse],
             request_options=request_options or default_request_options(),
         )
